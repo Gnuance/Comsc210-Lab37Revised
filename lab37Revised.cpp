@@ -1,5 +1,5 @@
 /*
-    Lab 37: Hash table
+    Lab 37: Hash table - Revised
         1. Part One: write a function sum_ascii() that receives a single string and returns the sum of that string's character's ASCII values.
         2. Part Two:
             - Your code contains a large dataset: over 100,000 12-character strings of hexadecimal characters. These might represent serial numbers, part numbers, etc.
