@@ -209,7 +209,6 @@ void PrintEntries(const map<int, list<string>> &mapContainer, const int numToPri
 void addKey(map<int, list<string>> &mapContainer)
 {
     string userInput = "";
-    int userInt = 0;
 
     // Get user input to add to table
     cout << "Please enter a Key to add to the hash table (Leave empty to cancel operation): ";
@@ -222,24 +221,26 @@ void addKey(map<int, list<string>> &mapContainer)
     }
 
     // Add if entry doesn't already exist
-    if (ContainsKey(mapContainer, userInput))   // Key already exists
+    if (ContainsKey(mapContainer, userInput)) // Key already exists
     {
-        cout << "Key: \"" << userInt << "\" already exists." << endl;
-        return;        
+        cout << "Key: \"" << userInput << "\" already exists." << endl;
+        return;
     }
     else
     {
         auto it = mapContainer.find(gen_hash_index(userInput));
 
         // Add key to bucket or create bucket if doesn't exist
-        if (it == mapContainer.end())   // Bucket does not exist, so create and add value
+        if (it == mapContainer.end()) // Bucket does not exist, so create and add value
         {
             mapContainer.insert({gen_hash_index(userInput), {userInput}});
         }
-        
+        else // Bucket exists, but key needs to be added
+        {
+            it->second.push_back(userInput);
+        }
 
-
-        cout << "Key: \"" << userInt << "\" inserted into table." << endl;
+        cout << "Key: \"" << userInput << "\" inserted into table." << endl;
         return;
     }
 }
@@ -248,7 +249,6 @@ void addKey(map<int, list<string>> &mapContainer)
 void searchKey(const map<int, list<string>> &mapContainer)
 {
     string userInput = "";
-    int userInt = 0;
 
     cout << "Please enter a Key to search for in the hash table (Leave empty to cancel operation): ";
     getline(cin, userInput);
@@ -262,12 +262,12 @@ void searchKey(const map<int, list<string>> &mapContainer)
     // Search for key in container
     if (!ContainsKey(mapContainer, userInput)) // Key does NOT exist
     {
-        cout << "Key: \"" << userInt << "\" does not exist." << endl;
+        cout << "Key: \"" << userInput << "\" does not exist." << endl;
         return;
     }
     else
     {
-        cout << "Key: \"" << userInt << "\" exists." << endl;
+        cout << "Key: \"" << userInput << "\" exists." << endl;
         return;
     }
 }
@@ -276,7 +276,6 @@ void searchKey(const map<int, list<string>> &mapContainer)
 void removeKey(map<int, list<string>> &mapContainer)
 {
     string userInput = "";
-    int userInt = 0;
 
     cout << "Please enter a Key to remove from the hash table (Leave empty to cancel operation): ";
     getline(cin, userInput);
@@ -288,9 +287,9 @@ void removeKey(map<int, list<string>> &mapContainer)
     }
 
     // Search for key in container
-    if (!ContainsKey(mapContainer, userInput))         // Key does NOT exist
+    if (!ContainsKey(mapContainer, userInput)) // Key does NOT exist
     {
-        cout << "Key: \"" << userInt << "\" does not exist." << endl;
+        cout << "Key: \"" << userInput << "\" does not exist." << endl;
         return;
     }
     else
@@ -302,9 +301,9 @@ void removeKey(map<int, list<string>> &mapContainer)
         if (tempList.size() == 0)
         {
             mapContainer.erase(gen_hash_index(userInput));
-        }        
+        }
 
-        cout << "Key: \"" << userInt << "\" has been removed." << endl;
+        cout << "Key: \"" << userInput << "\" has been removed." << endl;
         return;
     }
 }
@@ -313,43 +312,35 @@ void removeKey(map<int, list<string>> &mapContainer)
 void modifyKey(map<int, list<string>> &mapContainer)
 {
     string userInput = "";
-    int userInt = 0;
+
     // Get key to modify from user
-    do
+    cout << "Please enter a Key to modify from the hash table (Leave empty to cancel operation): ";
+    getline(cin, userInput);
+    // Guard against empty string and return
+    if (userInput == "")
     {
-        cout << "Please enter a Key to modify from the hash table (0-INT_MAX. Leave empty to cancel operation): ";
-        getline(cin, userInput);
-        // Guard against empty string and return
-        if (userInput == "")
-        {
-            cout << "Operation Cancelled." << endl;
-            return;
-        }
-    } while (!isValidOption(userInput, 0, INT_MAX));
-    // User input verified, search for key in container
-    userInt = stoi(userInput);
-    auto it = mapContainer.find(userInt); // Iterator to current key in map
-    if (it == mapContainer.end())         // Key does NOT exist
+        cout << "Operation Cancelled." << endl;
+        return;
+    }
+
+    // Verify Key is in container
+    if (!ContainsKey(mapContainer, userInput)) // Key does NOT exist
     {
-        cout << "Key: \"" << userInt << "\" does not exist." << endl;
+        cout << "Key: \"" << userInput << "\" does not exist." << endl;
         return;
     }
     else // Key exists, get new key from user
     {
         string newUserInput = "";
-        int newUserInt = 0;
-        // Get new key from user
-        do
+
+        cout << "Please enter a new integer to replace Key (Leave empty to cancel operation): ";
+        getline(cin, newUserInput);
+        // Guard against empty string and return
+        if (newUserInput == "")
         {
-            cout << "Please enter a new integer to replace Key (0-INT_MAX. Leave empty to cancel operation): ";
-            getline(cin, newUserInput);
-            // Guard against empty string and return
-            if (newUserInput == "")
-            {
-                cout << "Operation Cancelled." << endl;
-                return;
-            }
-        } while (!isValidOption(newUserInput, 0, INT_MAX));
+            cout << "Operation Cancelled." << endl;
+            return;
+        }
 
         // New key to insert values into
         newUserInt = stoi(newUserInput);
