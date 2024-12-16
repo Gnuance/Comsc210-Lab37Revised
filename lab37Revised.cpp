@@ -16,7 +16,7 @@
             - Print the first 100 entries; search for a key; add a key; remove a key; modify a key; and exit.
         2. In your finished Lab 37, create a new Lab38 branch, and code this assignment on that branch.
             - Do not collapse/merge/pull/squash anything - just leave that branch active so I can see it.
-    
+
     Notes:
         1. Added functions addKey, searchKey, removeKey, and modifyKey are VERY verbose and could be refactored for simplicity, but have been left as is
             for time convenience.
@@ -194,18 +194,18 @@ void addKey(map<int, list<string>> &mapContainer)
 {
     string userInput = "";
     int userInt = 0;
-    do
+
+    // Get user input to add to table
+    cout << "Please enter a Key to add to the hash table (Leave empty to cancel operation): ";
+    getline(cin, userInput);
+    // Guard against empty string and return
+    if (userInput == "")
     {
-        cout << "Please enter a Key to add to the hash table (0-INT_MAX. Leave empty to cancel operation): ";
-        getline(cin, userInput);
-        // Guard against empty string and return
-        if (userInput == "")
-        {
-            cout << "Operation Cancelled." << endl;
-            return;
-        }
-    } while (!isValidOption(userInput, 0, INT_MAX));
-    // User input verified, insert user defined key into container
+        cout << "Operation Cancelled." << endl;
+        return;
+    }
+    
+    // Add if entry doesn't already exist
     userInt = stoi(userInput);
     auto it = mapContainer.find(userInt); // Iterator to hash bucket in map
     if (it == mapContainer.end())         // Key does NOT exist
