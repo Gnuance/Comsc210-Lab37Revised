@@ -342,16 +342,21 @@ void modifyKey(map<int, list<string>> &mapContainer)
             return;
         }
 
-        // Remove old key
-        int indexOld = gen_hash_index(userInput);
-        auto itOld = mapContainer.find(gen_hash_index(userInput));
-        list<string> tempList = itOld->second;
-        tempList.remove(userInput);
-        if (tempList.size() == 0) mapContainer.erase(indexOld);
+        // Remove old Key
+        int indexOld = gen_hash_index(userInput); // Get hash of old key, delete from bucket.
+        auto it = mapContainer.find(indexOld);    // Hash index
+        list<string> tempList = it->second;       // Bucket
+        tempList.remove(userInput);               // Delete Key from bucket
+        if (tempList.size() == 0)
+            mapContainer.erase(indexOld); // If bucket becomes empty, delete from hash table
+
+        // Add new Key
+        int indexNew = gen_hash_index(newUserInput); // Get hash of new key, add to bucket.
+        it = mapContainer.find(indexNew);            // Hash index
+        if (it == mapContainer.end())
+            mapContainer.insert({indexNew, {newUserInput}}); // Bucket does not exist, so add bucket and key
+
         
-
-
-        if (itNew == mapContainer.end()) // New key does NOT exist so insert new key with current values
         {
             // Insert new entry into map
             mapContainer.insert({newUserInt, it->second}); // Create new entry with current list
