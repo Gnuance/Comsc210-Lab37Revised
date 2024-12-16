@@ -33,6 +33,7 @@
 using namespace std;
 
 int gen_hash_index(const string &);                           // Receives a single string and returns the sum of that string's character's ASCII values
+bool ContainsKey(const map<int, list<string>> &, string);     // Helper function checks if key is in hash table
 int mainMenu();                                               // Outputs prompt and collects user selection
 bool isValidOption(string, const int, const int);             // Helper function to validate user input
 void PrintEntries(const map<int, list<string>> &, const int); // Print number of entries specified
@@ -126,6 +127,12 @@ int gen_hash_index(const string &s)
     return sum;
 }
 
+// Helper function checks if key is in hash table
+bool ContainsKey(const map<int, list<string>> & hashMap, string s)
+{
+
+}
+
 // Main menu for application
 int mainMenu()
 {
@@ -204,7 +211,7 @@ void addKey(map<int, list<string>> &mapContainer)
         cout << "Operation Cancelled." << endl;
         return;
     }
-    
+
     // Add if entry doesn't already exist
     userInt = stoi(userInput);
     auto it = mapContainer.find(userInt); // Iterator to hash bucket in map
@@ -228,7 +235,7 @@ void searchKey(const map<int, list<string>> &mapContainer)
     int userInt = 0;
     do
     {
-        cout << "Please enter a Key to search for in the hash table (0-INT_MAX. Leave empty to cancel operation): ";
+        cout << "Please enter a Key to search for in the hash table (Leave empty to cancel operation): ";
         getline(cin, userInput);
         // Guard against empty string and return
         if (userInput == "")
