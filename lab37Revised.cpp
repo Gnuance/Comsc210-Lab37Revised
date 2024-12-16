@@ -329,11 +329,11 @@ void modifyKey(map<int, list<string>> &mapContainer)
         cout << "Key: \"" << userInput << "\" does not exist." << endl;
         return;
     }
-    else // Key exists, get new key from user
+    else // Key exists, get new Key from user and replace old Key
     {
         string newUserInput = "";
 
-        cout << "Please enter a new integer to replace Key (Leave empty to cancel operation): ";
+        cout << "Please enter a new string to replace Key (Leave empty to cancel operation): ";
         getline(cin, newUserInput);
         // Guard against empty string and return
         if (newUserInput == "")
@@ -342,10 +342,15 @@ void modifyKey(map<int, list<string>> &mapContainer)
             return;
         }
 
-        // New key to insert values into
-        newUserInt = stoi(newUserInput);
-        // Get values from current key and append to new user provided key or create new key/value
-        auto itNew = mapContainer.find(newUserInt);
+        // Remove old key
+        int indexOld = gen_hash_index(userInput);
+        auto itOld = mapContainer.find(gen_hash_index(userInput));
+        list<string> tempList = itOld->second;
+        tempList.remove(userInput);
+        if (tempList.size() == 0) mapContainer.erase(indexOld);
+        
+
+
         if (itNew == mapContainer.end()) // New key does NOT exist so insert new key with current values
         {
             // Insert new entry into map
