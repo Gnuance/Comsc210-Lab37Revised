@@ -229,8 +229,14 @@ void addKey(map<int, list<string>> &mapContainer)
     }
     else
     {
+        auto it = mapContainer.find(gen_hash_index(userInput));
+
         // Add key to bucket or create bucket if doesn't exist
-        mapContainer.insert({userInt, {}});
+        if (it == mapContainer.end())   // Bucket does not exist, so create and add value
+        {
+            mapContainer.insert({gen_hash_index(userInput), {userInput}});
+        }
+        
 
 
         cout << "Key: \"" << userInt << "\" inserted into table." << endl;
