@@ -131,13 +131,15 @@ int gen_hash_index(const string &s)
 bool ContainsKey(const map<int, list<string>> &hashMap, const string &s)
 {
     auto it = hashMap.find(gen_hash_index(s));
-    if (it == hashMap.end()) return false;  // Index doesn't exist
+    if (it == hashMap.end())
+        return false; // Index doesn't exist
     // Iterate to check if string is in list bucket
     for (string code : it->second)
     {
-        if (code == s) return true;
+        if (code == s)
+            return true;
     }
-    return false;   // List bucket iterated but code not found
+    return false; // List bucket iterated but code not found
 }
 
 // Main menu for application
@@ -240,21 +242,18 @@ void searchKey(const map<int, list<string>> &mapContainer)
 {
     string userInput = "";
     int userInt = 0;
-    do
+
+    cout << "Please enter a Key to search for in the hash table (Leave empty to cancel operation): ";
+    getline(cin, userInput);
+    // Guard against empty string and return
+    if (userInput == "")
     {
-        cout << "Please enter a Key to search for in the hash table (Leave empty to cancel operation): ";
-        getline(cin, userInput);
-        // Guard against empty string and return
-        if (userInput == "")
-        {
-            cout << "Operation Cancelled." << endl;
-            return;
-        }
-    } while (!isValidOption(userInput, 0, INT_MAX));
-    // User input verified, search for key in container
-    userInt = stoi(userInput);
-    auto it = mapContainer.find(userInt); // Iterator to hash bucket in map
-    if (it == mapContainer.end())         // Key does NOT exist
+        cout << "Operation Cancelled." << endl;
+        return;
+    }
+
+    // Search for key in container
+    if (!ContainsKey(mapContainer, userInput)) // Key does NOT exist
     {
         cout << "Key: \"" << userInt << "\" does not exist." << endl;
         return;
@@ -271,28 +270,28 @@ void removeKey(map<int, list<string>> &mapContainer)
 {
     string userInput = "";
     int userInt = 0;
-    do
+
+    cout << "Please enter a Key to remove from the hash table (Leave empty to cancel operation): ";
+    getline(cin, userInput);
+    // Guard against empty string and return
+    if (userInput == "")
     {
-        cout << "Please enter a Key to remove from the hash table (0-INT_MAX. Leave empty to cancel operation): ";
-        getline(cin, userInput);
-        // Guard against empty string and return
-        if (userInput == "")
-        {
-            cout << "Operation Cancelled." << endl;
-            return;
-        }
-    } while (!isValidOption(userInput, 0, INT_MAX));
-    // User input verified, search for key in container
-    userInt = stoi(userInput);
-    auto it = mapContainer.find(userInt); // Iterator to hash bucket in map
-    if (it == mapContainer.end())         // Key does NOT exist
+        cout << "Operation Cancelled." << endl;
+        return;
+    }
+
+    // Search for key in container
+    if (!ContainsKey(mapContainer, userInput))         // Key does NOT exist
     {
         cout << "Key: \"" << userInt << "\" does not exist." << endl;
         return;
     }
     else
     {
-        mapContainer.erase(userInt);
+        list<string> tempList = {};
+        // Remove user value from bucket, and delete bucket if empty
+        mapContainer.at(gen_hash_index(userInput)).remove(userInput);
+
         cout << "Key: \"" << userInt << "\" has been removed." << endl;
         return;
     }
