@@ -32,15 +32,15 @@
 #include <climits> // INT_MIN and MAX
 using namespace std;
 
-int gen_hash_index(const string &);                           // Receives a single string and returns the sum of that string's character's ASCII values
-bool ContainsKey(const map<int, list<string>> &, string);     // Helper function checks if key is in hash table
-int mainMenu();                                               // Outputs prompt and collects user selection
-bool isValidOption(string, const int, const int);             // Helper function to validate user input
-void PrintEntries(const map<int, list<string>> &, const int); // Print number of entries specified
-void addKey(map<int, list<string>> &);                        // Adds key to table
-void searchKey(const map<int, list<string>> &);               // Returns whether key exists and related values
-void removeKey(map<int, list<string>> &);                     // Removes key and related values
-void modifyKey(map<int, list<string>> &);                     // Modifies a key and transfers list values to new key
+int gen_hash_index(const string &);                               // Receives a single string and returns the sum of that string's character's ASCII values
+bool ContainsKey(const map<int, list<string>> &, const string &); // Helper function checks if key is in hash table
+int mainMenu();                                                   // Outputs prompt and collects user selection
+bool isValidOption(string, const int, const int);                 // Helper function to validate user input
+void PrintEntries(const map<int, list<string>> &, const int);     // Print number of entries specified
+void addKey(map<int, list<string>> &);                            // Adds key to table
+void searchKey(const map<int, list<string>> &);                   // Returns whether key exists and related values
+void removeKey(map<int, list<string>> &);                         // Removes key and related values
+void modifyKey(map<int, list<string>> &);                         // Modifies a key and transfers list values to new key
 
 const string INPUT_FILENAME = "lab37Data.txt"; // Filename for data input
 
@@ -128,9 +128,16 @@ int gen_hash_index(const string &s)
 }
 
 // Helper function checks if key is in hash table
-bool ContainsKey(const map<int, list<string>> & hashMap, string s)
+bool ContainsKey(const map<int, list<string>> &hashMap, const string &s)
 {
-
+    auto it = hashMap.find(gen_hash_index(s));
+    if (it == hashMap.end()) return false;  // Index doesn't exist
+    // Iterate to check if string is in list bucket
+    for (string code : it->second)
+    {
+        if (code == s) return true;
+    }
+    return false;   // List bucket iterated but code not found
 }
 
 // Main menu for application
