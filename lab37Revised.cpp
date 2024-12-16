@@ -222,17 +222,18 @@ void addKey(map<int, list<string>> &mapContainer)
     }
 
     // Add if entry doesn't already exist
-    userInt = stoi(userInput);
-    auto it = mapContainer.find(userInt); // Iterator to hash bucket in map
-    if (it == mapContainer.end())         // Key does NOT exist
+    if (ContainsKey(mapContainer, userInput))   // Key already exists
     {
-        mapContainer.insert({userInt, {}}); // Insert new key with empty list into table
-        cout << "Key: \"" << userInt << "\" inserted into table." << endl;
-        return;
+        cout << "Key: \"" << userInt << "\" already exists." << endl;
+        return;        
     }
     else
     {
-        cout << "Key: \"" << userInt << "\" already exists." << endl;
+        // Add key to bucket or create bucket if doesn't exist
+        mapContainer.insert({userInt, {}});
+
+
+        cout << "Key: \"" << userInt << "\" inserted into table." << endl;
         return;
     }
 }
@@ -288,9 +289,14 @@ void removeKey(map<int, list<string>> &mapContainer)
     }
     else
     {
-        list<string> tempList = {};
+        list<string> tempList = mapContainer.at(gen_hash_index(userInput));
+
         // Remove user value from bucket, and delete bucket if empty
-        mapContainer.at(gen_hash_index(userInput)).remove(userInput);
+        tempList.remove(userInput);
+        if (tempList.size() == 0)
+        {
+            mapContainer.erase(gen_hash_index(userInput));
+        }        
 
         cout << "Key: \"" << userInt << "\" has been removed." << endl;
         return;
